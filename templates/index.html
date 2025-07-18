@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chatbot</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; }
+        #userInput { width: 70%; padding: 10px; }
+        #sendBtn { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Web AI Chatbot</h2>
+    <div id="chatbox"></div>
+    <br>
+    <input type="text" id="userInput" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+
+    <script>
+        document.getElementById("sendBtn").onclick = function() {
+            var userText = document.getElementById("userInput").value;
+            if (userText.trim() === "") return;
+
+            var chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += "<b>You:</b> " + userText + "<br>";
+
+            fetch("/get?msg=" + userText)
+                .then(response => response.text())
+                .then(data => {
+                    chatbox.innerHTML += "<b>Bot:</b> " + data + "<br><br>";
+                    chatbox.scrollTop = chatbox.scrollHeight;
+                });
+
+            document.getElementById("userInput").value = "";
+        };
+    </script>
+</body>
+</html>
